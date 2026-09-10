@@ -90,5 +90,44 @@ def add_book():
     else:
         return render_template('add_book.html', result=result)
 
+@app.route('/delete_book/<int:book_id>' , methods=['POST'])
+def delete_book(book_id):
+    book = db.session.get(Book, book_id)
+
+    if not book:
+        flash("Buch nicht gefunden.", "danger")
+        return redirect(url_for("index"))
+
+    author_id = book.author_id
+    author_name = book.author.name
+    book_title = book.title
+
+    # 2. Buch löschen und Transaktion abschließen
+    db.session.delete(book)
+    db.session.commit()
+
+    # 3. Prüfen, wie viele verbleibende Bücher dieser Autor noch hat und löschen falls keine mehr da sind
+    remaining_books_count = (
+        db.session.query(Book).filter(Book.author_id == author_id).count()
+    )
+
+    if remaining_books_count == 0:
+        flash(
+            f"Buch „{book_title}“ gelöscht. Hinweis: {author_name} hat nun keine weiteren Bücher im Bestand!",
+            "warning",
+        )
+
+        author = db.session.get(Author, author_id)
+        db.session.delete(author)
+        db.session.commit()
+    else:
+        flash(
+            f"Buch „{book_title}“ gelöscht. {author_name} hat noch {remaining_books_count} weiteres/weitere Buch/Bücher im System.",
+            "success",
+        )
+
+    return redirect(url_for("index"))
+
+
 if __name__ == '__main__':
     app.run()
