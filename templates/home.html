@@ -1,16 +1,73 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Digital Library</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   </head>
   <body>
 
-    {% for book in books %}
+    {% for book in result %}
     <div> <h3>{{ book.title }}</h3>
     </div>
     {% endfor %}
 
   </body>
+</html>
+-->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bücherübersicht</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="card-container">
+        <header class="card-header">
+            <div>
+                <h1>Bibliothek</h1>
+                <p class="subtitle">Alle erfassten Bücher und deren Autoren</p>
+            </div>
+            <a href="{{ url_for('add_book') }}" class="btn-primary">+ Buch hinzufügen</a>
+        </header>
+
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Titel<a href="{{ url_for('index', sort='title') }}" class="sort-link" title="Nach Titel sortieren">↕</a></th>
+                        <th>Autor<a href="{{ url_for('index', sort='author') }}" class="sort-link" title="Nach Autor sortieren">↕</a></th>
+                        <th>Erscheinungsjahr</th>
+                        <th>ISBN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td class="font-medium">
+                            {{ book.title }}
+                        </td>
+                        <td>
+                            {# SQLAlchemy-relationship book.author.name in class Books--> author = db.relationship('Author', back_populates='books') #}
+                            {{ book.author.name }}
+                        </td>
+                        <td><span class="badge">{{ book.publication_year }}</span></td>
+                        <td class="text-mono">{{ book.isbn }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="empty-state">Noch keine Bücher vorhanden.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
 </html>

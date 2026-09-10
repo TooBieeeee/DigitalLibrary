@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -9,6 +9,7 @@ from flask_sqlalchemy.session import Session
 from data_models import db, Author, Book
 
 app = Flask(__name__)
+app.secret_key = "ein-geheimer-schluessel-fuer-sessions"
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
@@ -19,8 +20,18 @@ db.init_app(app)
 #    db.create_all()
 
 @app.route('/')
-def home():  # put application's code here
-    return 'Hello World!'
+def index():
+    sort_by = request.args.get("sort")
+    query = db.session.query(Book)
+    if sort_by == "title":
+        query = query.order_by(Book.title)
+    elif sort_by == "author":
+        query = query.join(Author).order_by(Author.name.asc())
+    elif sort_by == "publication_year":
+        query = query.order_by(Book.publication_year)
+
+    books = query.all()
+    return render_template('home.html', books=books)
 
 @app.route('/add_author' , methods=['GET', 'POST'])
 def add_author():
@@ -39,13 +50,15 @@ def add_author():
             )
             db.session.add(author)
             db.session.commit()
-            return f"<p>Author {author.name} added successfully!</p>"
+            flash(f"<p>Author {author.name} added successfully!", "success")
+            return redirect(url_for('index'))
     else:
         return render_template('add_author.html')
 
 @app.route('/add_book' , methods=['GET', 'POST'])
 def add_book():
-    result = db.session.query(Author).all()
+    result = db.session.query(Author).order_by(Author.name.asc()).all()
+    print(result)
     if request.method == 'POST':
         isbn = request.form.get('isbn')
         title = request.form.get('title')

@@ -53,6 +53,7 @@ label:first-of-type {
 
 input[type="text"],
 input[type="number"],
+input[type="date"],
 select {
     width: 100%;
     padding: 10px 14px;
@@ -95,4 +96,161 @@ input[type="submit"]:hover {
 
 input[type="submit"]:active {
     transform: scale(0.99);
+}
+
+/* --- Container & Layout für Listen/Tabellen --- */
+.card-container {
+    background-color: var(--card-bg);
+    padding: 32px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 950px;
+    margin: 20px auto;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.card-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Button-Style für Links */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 10px 18px;
+    background-color: var(--primary);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: background-color 0.15s ease, transform 0.05s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-primary:active {
+    transform: scale(0.99);
+}
+
+/* --- Tabellen-Styling --- */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.data-table th {
+    background-color: #f8fafc;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.data-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--text-main);
+    vertical-align: middle;
+}
+
+.data-table tbody tr {
+    transition: background-color 0.1s ease;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Typo-Details & Badges */
+.font-medium {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.text-mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #3730a3;
+    background-color: #e0e7ff;
+    border-radius: 9999px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 32px !important;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.data-table th {
+    /* vorherige Styles beibehalten */
+    white-space: nowrap;
+}
+
+.sort-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    margin-left: 6px;
+    color: var(--text-muted);
+    vertical-align: middle;
+    transition: color 0.15s ease, transform 0.1s ease;
+}
+
+.sort-link:hover {
+    color: var(--primary);
+    transform: scale(1.15);
+}
+
+/* Falls du ein <img> nutzt: */
+.sort-icon {
+    width: 14px;
+    height: 14px;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+}
+
+.sort-link:hover .sort-icon {
+    opacity: 1;
 }
