@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 from flask_sqlalchemy.session import Session
+from sqlalchemy import or_
 
 from data_models import db, Author, Book
 
@@ -22,7 +23,19 @@ db.init_app(app)
 @app.route('/')
 def index():
     sort_by = request.args.get("sort")
+    search_term = request.args.get("search")
     query = db.session.query(Book)
+
+    if search_term:
+        search_filter = f"%{search_term}%"
+        query = query.filter(
+            or_(
+                Book.title.ilike(search_filter),
+                Author.name.ilike(search_filter),
+                Book.isbn.ilike(search_filter),
+            )
+        )
+
     if sort_by == "title":
         query = query.order_by(Book.title)
     elif sort_by == "author":
@@ -31,7 +44,7 @@ def index():
         query = query.order_by(Book.publication_year)
 
     books = query.all()
-    return render_template('home.html', books=books)
+    return render_template('home.html', books=books, search_term=search_term)
 
 @app.route('/add_author' , methods=['GET', 'POST'])
 def add_author():

@@ -124,6 +124,12 @@ input[type="submit"]:active {
     color: var(--text-main);
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .subtitle {
     font-size: 0.875rem;
     color: var(--text-muted);
@@ -253,4 +259,78 @@ input[type="submit"]:active {
 
 .sort-link:hover .sort-icon {
     opacity: 1;
+}
+
+/* --- Suchleiste Styling --- */
+.search-bar-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    width: 100%;
+    max-width: 100%;
+    box-shadow: none;
+    padding: 0;
+    background: none;
+    flex-direction: row;
+}
+
+.search-input-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 36px 10px 14px;
+    font-size: 0.95rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    outline: none;
+    background-color: #ffffff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-input:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.search-clear-btn:hover {
+    color: var(--text-main);
+    background-color: #f1f5f9;
+}
+
+.btn-search {
+    padding: 10px 20px;
+    background-color: #334155;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, transform 0.05s ease;
+}
+
+.btn-search:hover {
+    background-color: #1e293b;
+}
+
+.btn-search:active {
+    transform: scale(0.98);
 }

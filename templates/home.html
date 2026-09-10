@@ -1,22 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Digital Library</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  </head>
-  <body>
-
-    {% for book in result %}
-    <div> <h3>{{ book.title }}</h3>
-    </div>
-    {% endfor %}
-
-  </body>
-</html>
--->
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -33,15 +14,35 @@
                 <h1>Bibliothek</h1>
                 <p class="subtitle">Alle erfassten Bücher und deren Autoren</p>
             </div>
-            <a href="{{ url_for('add_book') }}" class="btn-primary">+ Buch hinzufügen</a>
+            <div class="header-actions">
+                <a href="{{ url_for('add_author') }}" class="btn-primary">+ Author hinzufügen</a>
+                <a href="{{ url_for('add_book') }}" class="btn-primary">+ Buch hinzufügen</a>
+            </div>
         </header>
+
+        <!-- Suchleiste -->
+        <form action="{{ url_for('index') }}" method="GET" class="search-bar-container">
+            <div class="search-input-wrapper">
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Nach Titel, Autor oder ISBN suchen..."
+                    value="{{ search_term or '' }}"
+                    class="search-input"
+                >
+                {% if search_term %}
+                    <a href="{{ url_for('index') }}" class="search-clear-btn" title="Suche zurücksetzen">✕</a>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn-search">Suchen</button>
+        </form>
 
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>Titel<a href="{{ url_for('index', sort='title') }}" class="sort-link" title="Nach Titel sortieren">↕</a></th>
-                        <th>Autor<a href="{{ url_for('index', sort='author') }}" class="sort-link" title="Nach Autor sortieren">↕</a></th>
+                        <th>Titel<a href="{{ url_for('index', sort='title', search=search_term) }}" class="sort-link" title="Nach Titel sortieren">↕</a></th>
+                        <th>Autor<a href="{{ url_for('index', sort='author', search=search_term) }}" class="sort-link" title="Nach Autor sortieren">↕</a></th>
                         <th>Erscheinungsjahr</th>
                         <th>ISBN</th>
                     </tr>
@@ -53,7 +54,6 @@
                             {{ book.title }}
                         </td>
                         <td>
-                            {# SQLAlchemy-relationship book.author.name in class Books--> author = db.relationship('Author', back_populates='books') #}
                             {{ book.author.name }}
                         </td>
                         <td><span class="badge">{{ book.publication_year }}</span></td>
@@ -61,7 +61,13 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="4" class="empty-state">Noch keine Bücher vorhanden.</td>
+                        <td colspan="4" class="empty-state">
+                            {% if search_term %}
+                                Keine Treffer für „{{ search_term }}“ gefunden.
+                            {% else %}
+                                Noch keine Bücher vorhanden.
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
