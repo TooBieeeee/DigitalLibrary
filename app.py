@@ -86,7 +86,7 @@ def add_book():
         )
         db.session.add(book)
         db.session.commit()
-        flash(f"<p>Book {book.title} added successfully!", "success")
+        flash(f"Book {book.title} added successfully!", "success")
         return redirect(url_for('index'))
     else:
         return render_template('add_book.html', result=result)
